@@ -1,0 +1,74 @@
+{
+  "name": "heydoctor-challenge",
+  "description": "HeyDoctor Interview Challenge",
+  "version": "0.1.0",
+  "main": "src/index.js",
+  "author": "HeyDoctor <hello@heydoctor.com>",
+  "license": "MIT",
+  "scripts": {
+    "server": "node server",
+    "dev": "react-scripts start",
+    "dev:server": "nodemon server",
+    "db:sync": "node server/sync.js",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "airbnb",
+      "plugin:prettier/recommended"
+    ],
+    "env": {
+      "browser": true
+    },
+    "rules": {
+      "react/jsx-filename-extension": [
+        1,
+        {
+          "extensions": [
+            ".js"
+          ]
+        }
+      ]
+    }
+  },
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "all",
+    "arrowParens": "always"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "proxy": "http://localhost:5000",
+  "dependencies": {
+    "ajv": "6.7.0",
+    "axios": "^0.19.2",
+    "cors": "2.8.5",
+    "d3": "5.8.1",
+    "express": "4.16.4",
+    "isomorphic-fetch": "2.2.1",
+    "molekule": "^5.0.0",
+    "normalize.css": "8.0.1",
+    "prop-types": "15.7.0",
+    "react": "16.8.0",
+    "react-dom": "16.8.0",
+    "react-router-dom": "4.3.1",
+    "react-scripts": "^3.3.0",
+    "sequelize": "^5.21.3",
+    "sqlite3": "^4.1.1",
+    "styled-components": "^4.4.1"
+  },
+  "devDependencies": {
+    "nodemon": "1.18.10",
+    "eslint-config-airbnb": "17.1.0",
+    "eslint-config-prettier": "3.6.0",
+    "eslint-plugin-prettier": "3.0.1",
+    "prettier": "1.16.1"
+  }
+}
