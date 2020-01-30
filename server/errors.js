@@ -15,6 +15,7 @@ class Http404 extends HttpError {
 }
 
 module.exports = {
+  HttpError,
   Http400,
   Http404,
 };

@@ -6,6 +6,7 @@ const app = express();
 const port = 5000;
 
 const { Task } = require('./db');
+const { errorHandler } = require('./middleware');
 const { Http404 } = require('./errors');
 
 // Set up CORS since the client is on a different port.
@@ -13,7 +14,7 @@ app.use(cors());
 app.use(express.json());
 
 // List tasks
-app.get('/api/tasks', (req, res) => {
+app.get('/api/tasks', (req, res, next) => {
   const { status } = req.query;
 
   Task.findAll({
@@ -24,13 +25,11 @@ app.get('/api/tasks', (req, res) => {
     .then((tasks) => {
       res.json(tasks);
     })
-    .catch((err) => {
-      res.json({ error: err.message, code: err.code || 500 });
-    });
+    .catch(next);
 });
 
 // Create a task
-app.post('/api/tasks', (req, res) => {
+app.post('/api/tasks', (req, res, next) => {
   const { name } = req.body;
   if (!name) {
     return res.status(400).json({ error: 'name is required' });
@@ -40,13 +39,11 @@ app.post('/api/tasks', (req, res) => {
     .then((task) => {
       res.json(task);
     })
-    .catch((err) => {
-      res.json({ error: err.message, code: err.code || 500 });
-    });
+    .catch(next);
 });
 
 // Update a task
-app.patch('/api/tasks/:id', (req, res) => {
+app.patch('/api/tasks/:id', (req, res, next) => {
   const changes = req.body;
   if (Object.keys(changes).length === 0) {
     return res.status(400).json({ error: 'No updates provided' });
@@ -60,9 +57,8 @@ app.patch('/api/tasks/:id', (req, res) => {
 
       return task.update(changes).then((updatedTask) => res.json(updatedTask));
     })
-    .catch((err) => {
-      res.json({ error: err.message, code: err.code || 500 });
-    });
+    .catch(next);
 });
 
+app.use(errorHandler);
 app.listen(port, () => console.log(`Server listening on port ${port}!`));
