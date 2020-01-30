@@ -1,9 +1,22 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import PropTypes from 'prop-types';
 import { Box, Flex, Form, Formbot, Input, Button, Text } from 'molekule';
 
+import { TaskStatuses } from './constants';
 import TaskBadge from './task-badge';
 import TaskDetailsModal from './task-details';
+
+import alert from './lib/alert';
+import * as http from './lib/http';
+
+const ListCell = ({ children, ...props }) => (
+  <Flex alignItems="center" m={2} {...props}>
+    {children}
+  </Flex>
+);
+ListCell.propTypes = {
+  children: PropTypes.element.isRequired,
+};
 
 export default class TaskList extends Component {
   state = {
@@ -22,23 +35,17 @@ export default class TaskList extends Component {
       return;
     }
 
-    axios
-      .post('http://localhost:5000/api/tasks', values)
-      .then((response) => {
-        alert(`Task #${response.data.id} Created`);
-        this.loadTasks();
-      })
-      .catch((err) => console.error(err));
+    http.post('/tasks', values).then((response) => {
+      alert({ type: 'success', message: `Task #${response.data.id} Created` });
+      this.loadTasks();
+    });
   };
 
   runTask = (id) => {
-    axios
-      .patch(`http://localhost:5000/api/tasks/${id}`, { status: 'success' })
-      .then(() => {
-        alert(`Task #${id} Complete`);
-        this.loadTasks();
-      })
-      .catch((err) => console.error(err));
+    http.patch(`/tasks/${id}`, { status: 'success' }).then(() => {
+      alert({ type: 'success', message: `Task #${id} Complete` });
+      this.loadTasks();
+    });
   };
 
   toggleTaskDetailsModal = (id) => {
@@ -56,15 +63,12 @@ export default class TaskList extends Component {
       ...(status && { status }),
     });
 
-    axios
-      .get('http://localhost:5000/api/tasks', {})
-      .then((response) => {
-        this.setState({
-          tasks: response.data,
-          loading: false,
-        });
-      })
-      .catch((err) => console.error(err));
+    http.get('/tasks', {}).then((response) => {
+      this.setState({
+        tasks: response.data,
+        loading: false,
+      });
+    });
   }
 
   render() {
@@ -101,25 +105,25 @@ export default class TaskList extends Component {
           ) : (
             tasks.map((task) => (
               <Flex key={task.id} m={3}>
-                <Box flex={1}>
+                <ListCell>
                   <strong>{`#${task.id}`}</strong>
-                </Box>
-                <Box
+                </ListCell>
+                <ListCell
                   flex={4}
                   style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
                 >
                   {task.name}
-                </Box>
-                <Box flex={2}>
+                </ListCell>
+                <ListCell flex={2}>
                   <Text fontSize={12}>
                     {new Date(task.createdAt).toLocaleString()}
                   </Text>
-                </Box>
-                <Box flex={1}>
+                </ListCell>
+                <ListCell flex={1}>
                   <TaskBadge status={task.status} />
-                </Box>
-                <Box flex={1}>
-                  {task.status === 'pending' ? (
+                </ListCell>
+                <ListCell flex={1}>
+                  {task.status === TaskStatuses.PENDING ? (
                     <Button onClick={() => this.runTask(task.id)}>Run</Button>
                   ) : (
                     <Button
@@ -129,7 +133,7 @@ export default class TaskList extends Component {
                       Details
                     </Button>
                   )}
-                </Box>
+                </ListCell>
               </Flex>
             ))
           )}

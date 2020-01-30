@@ -1,12 +1,14 @@
 import React from 'react';
-import { Modal, Flex } from 'molekule';
+import { Modal, Flex, Box } from 'molekule';
+
+import { humanizeName } from './lib/utils';
 
 const TASK_DISPLAY_KEYS = ['id', 'name', 'status', 'createdAt', 'updatedAt'];
 
 const TaskKeyValue = ({ task, name }) => (
   <Flex justifyContent="space-between" style={{ width: '100%' }} m={2}>
     <Flex flex={1} justifyContent="flex-end" mr={2}>
-      <strong>{name}</strong>
+      <strong>{humanizeName(name)}</strong>
     </Flex>
     <Flex flex={3} justifyContent="flex-start">
       {task[name] || '<empty>'}

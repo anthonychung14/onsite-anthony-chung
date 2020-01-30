@@ -1,16 +1,12 @@
 import React from 'react';
 import { Badge } from 'molekule';
 
-const getBadgeStatus = (status) => {
-  if (status === 'pending') {
-    return 'info';
-  }
-
-  return status;
-};
+import { taskStatusToBadgeStatus } from './lib/utils';
 
 const TaskBadge = ({ status }) => (
-  <Badge variant={getBadgeStatus(status)}>{status.toUpperCase()}</Badge>
+  <Badge variant={taskStatusToBadgeStatus(status)}>
+    {status.toUpperCase()}
+  </Badge>
 );
 
 export default TaskBadge;
