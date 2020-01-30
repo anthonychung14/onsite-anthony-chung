@@ -1,0 +1,4 @@
+feat: Add client and server-side error handling
+
+This PR adds frontend form validation and failed request alerts and backend middleware for errors.
+
